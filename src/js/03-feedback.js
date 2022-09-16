@@ -12,23 +12,35 @@ const localKey = 'feedback-form-state';
 
 form.addEventListener('input', Throttle(storageFormData, 500));
 form.addEventListener('submit', onFormSubmit);
+window.addEventListener('load', checkStorage);
+function checkStorage() {
+  if (!localStorage.getItem(localKey)) return;
+  const formValue = JSON.parse(localStorage.getItem(localKey));
+  console.dir(formValue);
 
-function onFormSubmit(event) {
-  event.preventDefault();
+  for (const key in formValue) {
+    form.elements[key].value = formValue[key];
+  }
+}
+
+
+  function onFormSubmit(event) {
+    event.preventDefault();
  
-  const savedData = JSON.parse(localStorage.getItem(localKey));
+    const savedData = JSON.parse(localStorage.getItem(localKey));
     console.dir(savedData);
     
-  localStorage.removeItem(localKey);
-  event.currentTarget.reset();
-}
-function storageFormData(event) {
-  const formValue = { email: '', message: '' };
-  if (localStorage.getItem(localKey)) {
-    Object.assign(formValue, JSON.parse(localStorage.getItem(localKey)));
+    localStorage.removeItem(localKey);
+    event.currentTarget.reset();
   }
+  function storageFormData(event) {
+    const formValue = { email: '', message: '' };
+    if (localStorage.getItem(localKey)) {
+      Object.assign(formValue, JSON.parse(localStorage.getItem(localKey)));
+    }
   
-  formValue[event.target.name] = event.target.value;
-  //   console.log(formValue);
-  localStorage.setItem(localKey, JSON.stringify(formValue));
-}
+    formValue[event.target.name] = event.target.value;
+    //   console.log(formValue);
+    localStorage.setItem(localKey, JSON.stringify(formValue));
+  }
+
