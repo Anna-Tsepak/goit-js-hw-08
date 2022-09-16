@@ -22,7 +22,7 @@ const currentVideo = localStorage.getItem(timeKey);
 
 
     player.setCurrentTime(currentVideo).then(() => {
-        player.play();
+        // player.play();
 }).catch(function(error) {
     switch (error.name) {
         case 'RangeError':
